@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 
-enum SCRoutersDirection { rightToLeft, bottomToTop, material }
+enum SCRoutersDirection {
+  rightToLeft, // 从右往左推出界面
+  bottomToTop, // 从下往上推出界面
+  material, // 根据系统自行选择
+}
 
 class SCRouters {
   final Map<String, WidgetBuilder>? routes;
 
   SCRouters({this.routes});
 
-  static Future push(BuildContext context, Widget widget,
-      {String? routeName,
-      SCRoutersDirection direction = SCRoutersDirection.material}) async {
+  /*
+  推出新的界面
+  context 上下文
+  widget 新界面
+  routeName route标识
+  direction 方向
+  */
+  static Future push(
+    BuildContext context,
+    Widget widget, {
+    String? routeName,
+    SCRoutersDirection direction = SCRoutersDirection.material,
+  }) async {
     switch (direction) {
       case SCRoutersDirection.rightToLeft:
         return Navigator.push(
@@ -32,14 +46,17 @@ class SCRouters {
     }
   }
 
+  // 返回上一个界面
   static Future pop(BuildContext context) async {
     return Navigator.of(context).maybePop();
   }
 
+  // 返回指定的界面
   static Future popUtil(BuildContext context, String routeName) async {
     return Navigator.of(context).popUntil(ModalRoute.withName(routeName));
   }
 
+  // 推出已注册过的界面替换当前的界面
   static Future pushReplace(BuildContext context, String routeName) async {
     return Navigator.of(context).pushReplacementNamed(routeName);
   }
